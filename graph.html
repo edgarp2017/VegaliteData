@@ -19,11 +19,11 @@
       var vis1 ={
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "repeat": {
-          "row": ["curb-weight", "engine-size", "horsepower", "city-mpg","highway-mpg","price"],
-          "column": ["price", "highway-mpg", "city-mpg", "horsepower", "engine-size", "curb-weight"]
+          "row": ["num-of-cylinders", "curb-weight", "engine-size", "horsepower", "city-mpg","highway-mpg","price"],
+          "column": ["price", "highway-mpg", "city-mpg", "horsepower", "engine-size", "curb-weight", "num-of-cylinders"]
         },
         "spec": { 
-          "data": {"url": "https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv"},
+          "data": {"url": "https://raw.githubusercontent.com/krx421/vegalite/main/imports-85.json"},
           "mark": "point",
           "params": [
             {
