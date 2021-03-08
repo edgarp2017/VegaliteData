@@ -11,82 +11,64 @@
     <div id="vis2"></div>
     <div id="vis3"></div>
 
+    <!-- data: {
+      //     url: 'https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv'
+      //   }, -->
     <script type="text/javascript">
       // Q. vs Q.
-      var vis1 = {
-        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-        description: 'A simple bar chart with embedded data.',
-        data: {
-          url: 'https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv'
+      var vis1 ={
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "repeat": {
+          "row": ["curb-weight", "engine-size", "horsepower", "city-mpg","highway-mpg","price"],
+          "column": ["price", "highway-mpg", "city-mpg", "horsepower", "engine-size", "curb-weight"]
         },
-        mark: 'point',
-        encoding: {
-          x: {field: 'horsepower', type: 'quantitative'},
-          y: {field: 'price', type: 'quantitative'}
+        "spec": { 
+          "data": {"url": "https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv"},
+          "mark": "point",
+          "params": [
+            {
+              "name": "brush",
+              "select": {
+                "type": "interval",
+                "resolve": "union",
+                "on": "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                "translate": "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                "zoom": "wheel![event.shiftKey]"
+              }
+            },
+            {
+              "name": "grid",
+              "select": {
+                "type": "interval",
+                "resolve": "global",
+                "translate": "[mousedown[!event.shiftKey], window:mouseup] > window:mousemove!",
+                "zoom": "wheel![!event.shiftKey]"
+              },
+              "bind": "scales"
+            }
+          ],
+          "encoding": {
+            "x": {"field": {"repeat": "column"}, "type": "quantitative"},
+            "y": {
+              "field": {"repeat": "row"},
+              "type": "quantitative",
+              "axis": {"minExtent": 30}
+            },
+            "color": {
+              "condition": {
+                "param": "brush",
+                "field": "Origin",
+                "type": "nominal"
+              },
+              "value": "grey"
+            }
+          }
         }
-      };
+      }
       
-      //Q. vs C.
-      var vis2 = {
-        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-        description: 'A simple bar chart with embedded data.',
-        data: {
-          url: 'https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv'
-        },
-        mark: 'circle',
-        encoding: {
-          x: {
-            field: 'make', 
-            type: 'nominal',
-          },
-          y: {
-            field: 'engine-size', 
-            type: 'quantitative',
-          },
-          color: {
-            type: "nominal",
-            field: "body-style",
-          }
-        },
-      };
-
-      // C. vs C.
-      var vis3 = {
-        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-        description: 'A simple bar chart with embedded data.',
-        data: {
-          url: 'https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv'
-        },
-        transform: [
-          {
-            aggregate: [{
-            op: "count",
-            field: "body-style",
-            as: "body-styles"
-            }],
-            groupby: [ 'make']
-          }
-        ],
-        mark: 'circle',
-        encoding: {
-          x: {
-            field: 'make', 
-            type: 'nominal'
-          },
-          y: {
-            field: 'body-styles', 
-            type: 'quantitative'
-          }
-        },
-        color: {
-          type: "nominal",
-          field: "body-style",
-        }
-      };
-
       vegaEmbed('#vis', vis1);
-      vegaEmbed('#vis2', vis2);
-      vegaEmbed('#vis3', vis3);
+      // vegaEmbed('#vis2', vis2);
+      // vegaEmbed('#vis3', vis3);
 
     </script>
   </body>
