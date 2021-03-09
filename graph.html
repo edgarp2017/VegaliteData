@@ -5,18 +5,23 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.19.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
   </head>
   <body>
-    <div id="vis"></div>
-    <div id="vis2"></div>
-    <div id="vis3"></div>
+    <div class="container">
+      <div id="vis"></div>
+      <div id="vis2"></div>
+      <div id="vis3"></div>
+    </div>
 
     <!-- data: {
       //     url: 'https://raw.githubusercontent.com/edgarp2017/VegaliteData/master/data%20(1).csv'
       //   }, -->
     <script type="text/javascript">
       // Q. vs Q.
-      var vis1 ={
+    
+
+      let vis1 ={
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "repeat": {
           "row": ["num-of-cylinders", "curb-weight", "engine-size", "horsepower", "city-mpg","highway-mpg","price"],
@@ -54,22 +59,99 @@
               "type": "quantitative",
               "axis": {"minExtent": 30}
             },
-            "color": {
-              "condition": {
-                "param": "brush",
-                "field": "Origin",
-                "type": "nominal"
+          }
+        }
+      }
+
+      let vis2 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "repeat": {
+          "row": ["make", "fuel-type", "body-style"],
+          "column": ["price", "highway-mpg", "city-mpg", "horsepower", "engine-size", "curb-weight", "num-of-cylinders"]
+        },
+        "spec": { 
+          "data": {"url": "https://raw.githubusercontent.com/krx421/vegalite/main/imports-85.json"},
+          "mark": "point",
+          "params": [
+            {
+              "name": "brush",
+              "select": {
+                "type": "interval",
+                "resolve": "union",
+                "on": "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                "translate": "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                "zoom": "wheel![event.shiftKey]"
+              }
+            },
+            {
+              "name": "grid",
+              "select": {
+                "type": "interval",
+                "resolve": "global",
+                "translate": "[mousedown[!event.shiftKey], window:mouseup] > window:mousemove!",
+                "zoom": "wheel![!event.shiftKey]"
               },
-              "value": "grey"
+              "bind": "scales"
             }
+          ],
+          "encoding": {
+            "x": {"field": {"repeat": "row"}, "type": "nominal"},
+            "y": {
+              "field": {"repeat": "column"},
+              "type": "quantitative",
+              "axis": {"minExtent": 30}
+            },
+          }
+        }
+      }
+
+      let vis3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "repeat": {
+          "row": ["make", "fuel-type", "body-style"],
+          "column": ["make", "fuel-type", "body-style"]
+        },
+        "spec": { 
+          "data": {"url": "https://raw.githubusercontent.com/krx421/vegalite/main/imports-85.json"},
+          "mark": "circle",
+          "params": [
+            {
+              "name": "brush",
+              "select": {
+                "type": "interval",
+                "resolve": "union",
+                "on": "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                "translate": "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                "zoom": "wheel![event.shiftKey]"
+              }
+            },
+            {
+              "name": "grid",
+              "select": {
+                "type": "interval",
+                "resolve": "global",
+                "translate": "[mousedown[!event.shiftKey], window:mouseup] > window:mousemove!",
+                "zoom": "wheel![!event.shiftKey]"
+              },
+              "bind": "scales"
+            }
+          ],
+          "encoding": {
+            "x": {"field": {"repeat": "row"}, "type": "nominal"},
+            "y": {
+              "field": {"repeat": "column"},
+              "type": "nominal",
+              "axis": {"minExtent": 30}
+            },
           }
         }
       }
       
-      vegaEmbed('#vis', vis1);
+      // vegaEmbed('#vis', vis1);
       // vegaEmbed('#vis2', vis2);
-      // vegaEmbed('#vis3', vis3);
+      vegaEmbed('#vis3', vis3);
 
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
   </body>
 </html>
